@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>doopoll Culture Barometer</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body class="bg-gray-100">
+
+  <div class="container mx-auto my-8">
+    <div class="w-full my-8">
+      <h1 class="text-4xl text-yellow-600 font-black">Culture barometer</h1>
+      <h2 class="text-2xl text-gray-800 font-black">Sample project</h2>
+      <div class="w-2/3">
+        <p class="pt-4 leading-tight font-light text-gray-500">
+          This is a dashboard showing the health of company culture. The doopoll Culture Barometer is based on management scorecard methodology. This prototype shows how live data from doopoll can be extracted and reused by other tools using the Zapier integration. Scores on this dashboard are automatically updated every 15 minutes.
+        </p>
+      </div>
+    </div>
+
+
+
+      <ul id="scorecard" class="flex flex-row flex-wrap -mx-2">
+      </ul>
+
+  </div>
+
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+  <script type='text/javascript'>
+    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1Iggkc8HyyTYjzKuBNv5SidOfzIsjT-9Qqsx_N1jRR14/edit?usp=sharing';
+
+    function init() {
+      Tabletop.init({
+        key: publicSpreadsheetUrl,
+        callback: showInfo,
+        simpleSheet: true
+      })
+    }
+
+    function showInfo(data, tabletop) {
+
+      data.forEach((item) => {
+        const listItem = document.createElement('li');
+        const listItemInner = document.createElement('span');
+        const textWrapper = document.createElement('span');
+        const header = document.createElement('h1');
+        const description = document.createElement('p');
+        const scoreBadge = document.createElement('span');
+        const score = document.createElement('p');
+
+        score.innerHTML  = item.Percentage;
+        header.innerHTML = item.Section;
+        description.innerHTML = item.Description;
+
+        listItem.setAttribute('class', 'w-full md:w-1/2 px-2 my-4');
+        listItemInner.setAttribute('class', 'shadow-md rounded px-4 py-2 bg-white flex flex-row items-center');
+        textWrapper.setAttribute('class', 'textWrapper w-2/3 my-4');
+        scoreBadge.setAttribute('class', 'scoreBadge w-1/3 p-4 m-4  flex items-center justify-center');
+        score.setAttribute('class', 'listScore text-2xl font-black text-blue-100 my-2 p-4 bg-blue-600 rounded-lg');
+        header.setAttribute('class', 'listHeader text-2xl font-bold text-blue-500');
+        description.setAttribute('class', 'listDescription font-light text-gray-500 leading-tight');
+
+        listItem.append(listItemInner);
+        listItemInner.append(textWrapper);
+        textWrapper.append(header);
+        textWrapper.append(description);
+        listItemInner.append(scoreBadge)
+        scoreBadge.append(score);
+        const list = document.getElementById('scorecard')
+        list.append(listItem);
+      });
+
+      console.log(data);
+    }
+
+    window.addEventListener('DOMContentLoaded', init)
+  </script>
+
+
+</body>
+</html>
